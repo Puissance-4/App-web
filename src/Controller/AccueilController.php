@@ -49,7 +49,7 @@ class AccueilController extends AbstractController
      /**
      * @Route("/ajouterf", name="ajouterf")
      */
-    public function ajouterf(Request $request)
+  /*  public function ajouterf(Request $request)
     {
         $entityManager=$this->getDoctrine()->getManager();
         $fraisf= new Fraisforfaitise;
@@ -63,7 +63,7 @@ class AccueilController extends AbstractController
         }
         return $this->render('acceuil/ajouterf.html.twig',['form'=>$form->createView()]);
 
-    }
+    }*/
 
     /**
      * @Route("/modifierFraisHF/{id}", name="modifierFraisHF", methods="GET|POST")
@@ -117,7 +117,7 @@ class AccueilController extends AbstractController
         }
         return $this->redirectToRoute("accueil");
     }
-
+/*
     /**
      * @Route("/supprimerF/{id}", name="supprimerF", methods="DELETE")
      */

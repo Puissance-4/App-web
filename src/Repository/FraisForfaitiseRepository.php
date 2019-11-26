@@ -19,6 +19,16 @@ class FraisForfaitiseRepository extends ServiceEntityRepository
         parent::__construct($registry, Fraisforfaitise::class);
     }
 
+    public function findByIdFiche($value)
+    {
+        return $this->createQueryBuilder('f')
+            ->andWhere('f.ID_FICHE = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Fraisforfaitise[] Returns an array of Fraisforfaitise objects
     //  */

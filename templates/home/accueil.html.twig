@@ -4,7 +4,8 @@
 
 {% block body %}
     <br/>
-    <a href={{path("home")}} type='button' class="btn btn-primary"><i class="fas fa-sign-out-alt"></i></a>
+    <a href="{{path('home')}}" type='button' class="btn btn-primary"><i class="fas fa-sign-out-alt"></i> Deconnexion</a>
+    <a href="{{path('choixfiche')}}" type='button' class="btn btn-primary"><i class="fas fa-sign-out-alt"></i> Retour</a>
     <br/><br/>
     <h1>FRAIS HORS FORFAIT</h1><hr/>
     {% for unFraisHF in fraisHF %}
@@ -30,29 +31,24 @@
         </div>
         <hr/>
     {% endfor %}
-    <a href={{path("ajouterhf")}} type='button' class="btn btn-success">Ajouter frais hors forfait</a><hr/>
+    <a href='{{path("ajouterhf")}}' type='button' class="btn btn-success">Ajouter frais hors forfait</a><hr/>
     <h1>FRAIS FORFAITISE</h1><hr/>
-    {% for unFraisF in fraisF %}
+    {% for unType in typeFraisF %}
+    
         <div class="container">
             <div class="row">
                 <div class="col-sm">
-                    Type: {{ unFraisF.idType.libelle}}<br/>
-                    Quantité: {{ unFraisF.quantite}}<br/>
-                    ID de fiche:{{unFraisF.idFiche.id}}<br/>
+                    Type: {{ unType.libelle}}<br/>
+                           
                 </div>
+
                 <div class="col-sm">
-                    <a href="{{path('modifierFraisF', { 'id':unFraisF.id })}}" type='button' class="btn btn-warning"><i class="fas fa-edit"></i></a>
-                </div>
-                <div class="col-sm">
-                    <form action="{{ path('supprimerF', {id : unFraisF.id})}}" method="post">
-                        <input type="hidden" name="_method" value="DELETE"></input>
-                        <input type="hidden" name="_token" value="{{csrf_token('delete'~ unFraisF.id)}}"></input>
-                        <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                    </form>
+                    <input type="number" name="howmuch" value="{{ficheFF[loop.index0].quantite}}">
                 </div>
             </div>
         </div>
         <hr/>
     {% endfor %}
-    <a href={{path("ajouterf")}} type='button' class="btn btn-success">Ajouter frais forfaitisé</a>
+    
+    <a href="{{path('accueil', {id : ficheHF.id})}}" type='button' class="btn btn-success">Ajouter frais forfaitisé</a>
 {% endblock %}

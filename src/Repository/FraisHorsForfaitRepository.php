@@ -19,6 +19,16 @@ class FraisHorsForfaitRepository extends ServiceEntityRepository
         parent::__construct($registry, Fraishorsforfait::class);
     }
 
+
+    public function findByIdFiche($value)
+    {
+        return $this->createQueryBuilder('f')
+            ->andWhere('f.ID_FICHE = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
     // /**
     //  * @return Fraishorsforfait[] Returns an array of Fraishorsforfait objects
     //  */

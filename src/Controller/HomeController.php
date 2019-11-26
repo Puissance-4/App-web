@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Fiche;
 use App\Entity\Fraisforfaitise;
+use App\Entity\Typefraisforfait;
 use App\Entity\Fraishorsforfait;
 use App\Entity\Visiteur;
 use App\Form\LoginType;
@@ -32,7 +33,7 @@ class HomeController extends AbstractController
             //Verif de la correspondance du mdp
             foreach($lesVisiteurs as $leVisiteur){
                 if($leVisiteur->getMdp() == $form->get('mdp')->getData()){
-                    return $this->redirectToRoute("accueil");
+                    return $this->redirectToRoute("choixfiche");
                 }
             }
             
@@ -41,16 +42,33 @@ class HomeController extends AbstractController
     }
 
     /**
-     * @Route("/accueil", name="accueil")
+     * @Route("/choixfiche", name="choixfiche")
      */
-    public function accueil()
+    public function choixfiche()
+    {
+        $repository=$this->getDoctrine()->getRepository(Fiche::class);
+        $fiches=$repository->findAll();
+       
+
+        return $this->render('home/choixfiche.html.twig', ['fiches'=>$fiches]);
+    }
+
+    
+    /**
+     * @Route("/accueil/{id}", name="accueil")
+     */
+    public function accueil($id)
     {
         $repository=$this->getDoctrine()->getRepository(Fraishorsforfait::class);
-        $fraisHorsForfait=$repository->findAll();
+        $fraisHorsForfait=$repository->findByIdFiche($id);
+        $repository=$this->getDoctrine()->getRepository(Typefraisforfait::class);
+        $typeFraisForfaitise=$repository->findAll();
         $repository=$this->getDoctrine()->getRepository(Fraisforfaitise::class);
-        $fraisForfaitise=$repository->findAll();
+        $ficheFF=$repository->findByIdFiche($id);
+        $repository=$this->getDoctrine()->getRepository(Fiche::class);
+        $ficheHF=$repository->find($id);
 
-        return $this->render('home/accueil.html.twig', ['fraisHF'=>$fraisHorsForfait, 'fraisF'=>$fraisForfaitise]);
+        return $this->render('home/accueil.html.twig', ['fraisHF'=>$fraisHorsForfait, 'typeFraisF'=>$typeFraisForfaitise, 'ficheHF'=>$ficheHF, 'ficheFF'=>$ficheFF]);
     }
 
     /**
@@ -94,6 +112,63 @@ class HomeController extends AbstractController
         }
         return new JsonResponse($formatted);
     }
+
+    /**
+     * @Route("/getAPIFraisHF", name="getAPIFraisHF")
+     */
+    public function getAPIFraisHF(Request $request)
+    {
+        $repo = $this->getDoctrine()->getRepository(Fraishorsforfait::class);
+        $frais = $repo->findAll();
+        $formatted = [];
+        foreach ($frais as $unFrais) {
+            $formatted[] = [
+                'id'            => $unFrais->getId(),
+                'date'         => $unFrais->getDate(),
+                'montant'           => $unFrais->getMontant(),
+                'libelle'           => $unFrais->getLibelle(),
+                'validite'           => $unFrais->getValidite(),
+                'idFiche'           => $unFrais->getIdFiche()->getId(),
+            ];
+        }
+        return new JsonResponse($formatted);
+    }
     
+    /**
+     * @Route("/getAPIFraisF", name="getAPIFraisF")
+     */
+    public function getAPIFraisF(Request $request)
+    {
+        $repo = $this->getDoctrine()->getRepository(Fraisforfaitise::class);
+        $frais = $repo->findAll();
+        $formatted = [];
+        foreach ($frais as $unFrais) {
+            $formatted[] = [
+                'id'            => $unFrais->getId(),
+                'quantite'         => $unFrais->getQuantite(),
+                'idFiche'           => $unFrais->getIdFiche()->getId(),
+                'idType'           => $unFrais->getIdType()->getLibelle(),
+            ];
+        }
+        return new JsonResponse($formatted);
+    }
+
+    /**
+     * @Route("/getAPIType", name="getAPIType")
+     */
+    public function getAPIType(Request $request)
+    {
+        $repo = $this->getDoctrine()->getRepository(Typefraisforfait::class);
+        $frais = $repo->findAll();
+        $formatted = [];
+        foreach ($frais as $unFrais) {
+            $formatted[] = [
+                'id'                => $unFrais->getId(),
+                'libelle'           => $unFrais->getLibelle(),
+                'montantUnitaire'   => $unFrais->getMontantUnitaire(),
+            ];
+        }
+        return new JsonResponse($formatted);
+    }
 
 }
