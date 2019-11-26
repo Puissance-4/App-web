@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Appli Web{% endblock %}
+
+{% block body %}
+    <br/>
+    <a href={{path("home")}} type='button' class="btn btn-primary"><i class="fas fa-sign-out-alt"></i></a>
+    <br/><br/>
+    <h1>FRAIS HORS FORFAIT</h1><hr/>
+    {% for unFraisHF in fraisHF %}
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    Date : {{ unFraisHF.date|date("d-m-Y") }}<br/>
+                    Nom : {{ unFraisHF.libelle }}<br/>
+                    Montant : {{ unFraisHF.montant }}€<br/>
+                    ID de fiche :{{unFraisHF.idFiche.id}}<br/>
+                </div>
+                <div class="col-sm">
+                    <a href="{{path('modifierFraisHF',{ 'id':unFraisHF.id })}}" type='button' class="btn btn-warning"><i class="fas fa-edit"></i></a> 
+                </div>
+                <div class="col-sm">
+                    <form action="{{ path('supprimerHF', {id : unFraisHF.id})}}" method="post">
+                        <input type="hidden" name="_method" value="DELETE"></input>
+                        <input type="hidden" name="_token" value="{{csrf_token('delete'~ unFraisHF.id)}}"></input>
+                        <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <hr/>
+    {% endfor %}
+    <a href={{path("ajouterhf")}} type='button' class="btn btn-success">Ajouter frais hors forfait</a><hr/>
+    <h1>FRAIS FORFAITISE</h1><hr/>
+    {% for unFraisF in fraisF %}
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    Type: {{ unFraisF.idType.libelle}}<br/>
+                    Quantité: {{ unFraisF.quantite}}<br/>
+                    ID de fiche:{{unFraisF.idFiche.id}}<br/>
+                </div>
+                <div class="col-sm">
+                    <a href="{{path('modifierFraisF', { 'id':unFraisF.id })}}" type='button' class="btn btn-warning"><i class="fas fa-edit"></i></a>
+                </div>
+                <div class="col-sm">
+                    <form action="{{ path('supprimerF', {id : unFraisF.id})}}" method="post">
+                        <input type="hidden" name="_method" value="DELETE"></input>
+                        <input type="hidden" name="_token" value="{{csrf_token('delete'~ unFraisF.id)}}"></input>
+                        <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <hr/>
+    {% endfor %}
+    <a href={{path("ajouterf")}} type='button' class="btn btn-success">Ajouter frais forfaitisé</a>
+{% endblock %}
