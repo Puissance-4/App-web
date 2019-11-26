@@ -4,7 +4,7 @@
 
 {% block body %}
     <br/>
-    <a href="{{path('home')}}" type='button' class="btn btn-primary"><i class="fas fa-sign-out-alt"></i> Deconnexion</a>
+    <a href="{{path('home')}}" type='button' class="btn btn-primary"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
     <a href="{{path('choixfiche')}}" type='button' class="btn btn-primary"><i class="fas fa-sign-out-alt"></i> Retour</a>
     <br/><br/>
     <h1>FRAIS HORS FORFAIT</h1><hr/>
@@ -15,7 +15,6 @@
                     Date : {{ unFraisHF.date|date("d-m-Y") }}<br/>
                     Nom : {{ unFraisHF.libelle }}<br/>
                     Montant : {{ unFraisHF.montant }}€<br/>
-                    ID de fiche :{{unFraisHF.idFiche.id}}<br/>
                 </div>
                 <div class="col-sm">
                     <a href="{{path('modifierFraisHF',{ 'id':unFraisHF.id })}}" type='button' class="btn btn-warning"><i class="fas fa-edit"></i></a> 

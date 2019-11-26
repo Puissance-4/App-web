@@ -18,7 +18,7 @@ class HomeController extends AbstractController
     /**
      * @Route("/", name="home")
      */
-    public function index(Request $request)
+    public function index(Request $request) //Formulaire de connexion
     {
         $visiteur=new Visiteur;
         $form=$this->createForm(LoginType::class,$visiteur);
@@ -44,20 +44,20 @@ class HomeController extends AbstractController
     /**
      * @Route("/choixfiche", name="choixfiche")
      */
-    public function choixfiche()
+    public function choixfiche() 
     {
         $repository=$this->getDoctrine()->getRepository(Fiche::class);
-        $fiches=$repository->findAll();
+        $fiches=$repository->findAll(); //récupère toutes les fiches
        
 
-        return $this->render('home/choixfiche.html.twig', ['fiches'=>$fiches]);
+        return $this->render('home/choixfiche.html.twig', ['fiches'=>$fiches]); //page de choix de la fiche
     }
 
     
     /**
      * @Route("/accueil/{id}", name="accueil")
      */
-    public function accueil($id)
+    public function accueil($id) //récupère tous les frais et types de frais pour la fiche n°$id
     {
         $repository=$this->getDoctrine()->getRepository(Fraishorsforfait::class);
         $fraisHorsForfait=$repository->findByIdFiche($id);
@@ -74,7 +74,7 @@ class HomeController extends AbstractController
     /**
      * @Route("/getAPIFiche", name="getAPIFiche")
      */
-    public function getAPIFiche(Request $request)
+    public function getAPIFiche(Request $request) 
     {
         $repo = $this->getDoctrine()->getRepository(Fiche::class);
         $fiches = $repo->findAll();

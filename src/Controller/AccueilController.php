@@ -2,15 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\Fiche;
 use App\Entity\Fraisforfaitise;
 use App\Entity\Fraishorsforfait;
-use App\Entity\Visiteur;
 use App\Form\AjoutFraiForfaitiseType;
 use App\Form\AjoutHorsForfaitType;
-use App\Form\LoginType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -21,14 +17,14 @@ class AccueilController extends AbstractController
      */
     public function index()
     {
-        return $this->render('acceuil/index.html.twig', [
+        return $this->render('acceuil/index.html.twig', [ //page de connexion
             'controller_name' => 'AccueilController',
         ]);
     }
      /**
      * @Route("/ajouterhf", name="ajouterhf")
      */
-    public function ajouterhf(Request $request)
+    public function ajouterhf(Request $request) //permet d'ajouter un frais hors forfait
     {
         $entityManager=$this->getDoctrine()->getManager();
         $fraishf= new Fraishorsforfait();
@@ -68,7 +64,7 @@ class AccueilController extends AbstractController
     /**
      * @Route("/modifierFraisHF/{id}", name="modifierFraisHF", methods="GET|POST")
      */
-    public function modifierFraisHF($id, Request $request)
+    public function modifierFraisHF($id, Request $request) // permet de modifier un frais hors forfait déjà créé
     {
         $repository = $this->getDoctrine()->getRepository(FraisHorsForfait::class);
         $frais = $repository->find($id);
@@ -86,7 +82,7 @@ class AccueilController extends AbstractController
     /**
      * @Route("/modifierFraisF/{id}", name="modifierFraisF", methods="GET|POST")
      */
-    public function modifierFraisF($id, Request $request)
+    public function modifierFraisF($id, Request $request)  // permet de modifier un frais forfaitisé déjà créé
     {
         $repository = $this->getDoctrine()->getRepository(FraisForfaitise::class);
         $frais = $repository->find($id);
@@ -117,22 +113,5 @@ class AccueilController extends AbstractController
         }
         return $this->redirectToRoute("accueil");
     }
-/*
-    /**
-     * @Route("/supprimerF/{id}", name="supprimerF", methods="DELETE")
-     */
-    public function supprimerF($id, Request $request)
-    {
-        if($this->isCsrfTokenValid('delete'.$id, $request->request->get('_token')))
-        {
-            $repository = $this->getDoctrine()->getRepository(FraisForfaitise::class);
-            $frais = $repository->find($id);
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($frais);
-            $entityManager->flush();
 
-        }
-        return $this->redirectToRoute("accueil");
-    }
 }
-
