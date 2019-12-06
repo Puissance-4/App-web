@@ -19,6 +19,16 @@ class FicheRepository extends ServiceEntityRepository
         parent::__construct($registry, Fiche::class);
     }
 
+    public function findByDateCreation($value)
+    {
+        return $this->createQueryBuilder('f')
+            ->andWhere('f.DATE_CREATION = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Fiche[] Returns an array of Fiche objects
     //  */

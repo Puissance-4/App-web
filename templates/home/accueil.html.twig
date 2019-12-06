@@ -30,7 +30,7 @@
         </div>
         <hr/>
     {% endfor %}
-    <a href='{{path("ajouterhf")}}' type='button' class="btn btn-success">Ajouter frais hors forfait</a><hr/>
+    <a href='{{path("ajouterhf", {'id': idfiche})}}' type='button' class="btn btn-success">Ajouter frais hors forfait</a><hr/>
     <h1>FRAIS FORFAITISE</h1><hr/>
     {% for unType in typeFraisF %}
     
@@ -38,16 +38,14 @@
             <div class="row">
                 <div class="col-sm">
                     Type: {{ unType.libelle}}<br/>
-                           
-                </div>
-
-                <div class="col-sm">
-                    <input type="number" name="howmuch" value="{{ficheFF[loop.index0].quantite}}">
-                </div>
+                    Quantité: {{ ficheFF[loop.index0].quantite}}
+                    <a href= '{{path("ConfChange", {id:idfiche, idfrais: unType.id})}}' type="button" class="btn btn-warning">
+                        Modifier
+                    </a><br/>                 
+                 </div>
             </div>
         </div>
         <hr/>
     {% endfor %}
     
-    <a href="{{path('accueil', {id : ficheHF.id})}}" type='button' class="btn btn-success">Ajouter frais forfaitisé</a>
 {% endblock %}

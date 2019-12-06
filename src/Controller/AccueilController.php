@@ -6,38 +6,30 @@ use App\Entity\Fraisforfaitise;
 use App\Entity\Fraishorsforfait;
 use App\Form\AjoutFraiForfaitiseType;
 use App\Form\AjoutHorsForfaitType;
+use App\Form\ConfChangQteType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class AccueilController extends AbstractController
 {
-    /**
-     * @Route("/accueil", name="accueil")
-     */
-    public function index()
-    {
-        return $this->render('acceuil/index.html.twig', [ //page de connexion
-            'controller_name' => 'AccueilController',
-        ]);
-    }
+
      /**
-     * @Route("/ajouterhf", name="ajouterhf")
+     * @Route("/ajouterhf/{id}", name="ajouterhf")
      */
-    public function ajouterhf(Request $request) //permet d'ajouter un frais hors forfait
+    public function ajouterhf($id, Request $request) //permet d'ajouter un frais hors forfait
     {
         $entityManager=$this->getDoctrine()->getManager();
         $fraishf= new Fraishorsforfait();
         $form=$this->createForm(AjoutHorsForfaitType::class,$fraishf);
         $form->handleRequest($request);
-       
 
         if($form->isSubmitted() && $form->isValid())
         {
            $entityManager->persist($fraishf);
            $entityManager->flush($fraishf);
           
-            return $this->redirectToRoute("accueil");
+           return $this->redirectToRoute("accueil",['id'=>$id]);
         }
         return $this->render('acceuil/ajouterhf.html.twig',['form'=>$form->createView()]);
 
@@ -74,7 +66,7 @@ class AccueilController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
 
-            return $this->redirectToRoute("accueil");
+            return $this->redirectToRoute("accueil",['id'=>$id]);
         }
         return $this->render('acceuil/modifierFraisHF.html.twig', ['frais'=>$frais, 'form'=>$form->createView()]);
     }
@@ -92,7 +84,7 @@ class AccueilController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
 
-            return $this->redirectToRoute("accueil");
+            return $this->redirectToRoute("accueil",['id'=>$id]);
         }
         return $this->render('acceuil/modifierFraisF.html.twig', ['frais'=>$frais, 'form'=>$form->createView()]);
     }
@@ -111,7 +103,27 @@ class AccueilController extends AbstractController
             $entityManager->flush();
 
         }
-        return $this->redirectToRoute("accueil");
+        return $this->redirectToRoute("accueil",['id'=>$id]);
+    }
+
+    /**
+     * @Route("/ConfChange/{id}/{idfrais}", name="ConfChange", methods="GET|POST")
+     */
+    public function ConfChange($id, $idfrais, Request $request)
+    {
+        $repository = $this->getDoctrine()->getRepository(Fraisforfaitise::class);
+        $fraisFF = $repository->find($idfrais);
+        $form=$this->createForm(ConfChangQteType::class,$fraisFF);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
+
+            return $this->redirectToRoute("accueil",['id'=>$id]);
+        }
+        
+        return $this->render('acceuil/changeforfait.html.twig', ['fraisFF'=>$fraisFF,'idfrais'=>$idfrais,'id'=>$id,'form' => $form->createView()]);
     }
 
 }

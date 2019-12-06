@@ -48,7 +48,18 @@ class HomeController extends AbstractController
     {
         $repository=$this->getDoctrine()->getRepository(Fiche::class);
         $fiches=$repository->findAll(); //récupère toutes les fiches
-       
+
+        return $this->render('home/choixfiche.html.twig', ['fiches'=>$fiches]); //page de choix de la fiche
+    }
+
+    /**
+     * @Route("/choixficheParMois", name="choixficheParMois")
+     */
+    public function choixficheParMois(Request $request) 
+    {
+        $repository=$this->getDoctrine()->getRepository(Fiche::class);
+        $mois= $request->get('mois');
+        $fiches=$repository->findByDateCreation('2019-'.$mois.'-07');
 
         return $this->render('home/choixfiche.html.twig', ['fiches'=>$fiches]); //page de choix de la fiche
     }
@@ -66,9 +77,9 @@ class HomeController extends AbstractController
         $repository=$this->getDoctrine()->getRepository(Fraisforfaitise::class);
         $ficheFF=$repository->findByIdFiche($id);
         $repository=$this->getDoctrine()->getRepository(Fiche::class);
-        $ficheHF=$repository->find($id);
+        $idfiche=$id;
 
-        return $this->render('home/accueil.html.twig', ['fraisHF'=>$fraisHorsForfait, 'typeFraisF'=>$typeFraisForfaitise, 'ficheHF'=>$ficheHF, 'ficheFF'=>$ficheFF]);
+        return $this->render('home/accueil.html.twig', ['fraisHF'=>$fraisHorsForfait, 'typeFraisF'=>$typeFraisForfaitise, 'idfiche'=>$idfiche, 'ficheFF'=>$ficheFF]);
     }
 
     /**
@@ -89,6 +100,10 @@ class HomeController extends AbstractController
                 'id'                => $fiche->getId(),
                 'datemodif'         => $fiche->getDatemodif(),
                 'datecreation'      => $fiche->getDatecreation(),
+                'idEtat'      => $fiche->getIdEtat()->getLibelle(),
+                'montant_rembourse'      => $fiche->getMontantRembourse(),
+
+
                 //'lesGenres'         => ltrim($genreDeLaSerie, $genreDeLaSerie[0])
             ];
         }
@@ -170,5 +185,6 @@ class HomeController extends AbstractController
         }
         return new JsonResponse($formatted);
     }
+ 
 
 }
