@@ -69,6 +69,14 @@ class AccueilController extends AbstractController
     {
         $repository = $this->getDoctrine()->getRepository(FraisHorsForfait::class);
         $frais = $repository->find($id);
+
+        $idFiche=$frais->getIdFiche()->getId();
+
+        //On récupère la fiche dont l'id se trouve dans l'URL
+        $repository=$this->getDoctrine()->getRepository(Fiche::class);
+        $fiche=$repository->find($idFiche);
+        $fiche->setDateModif(new \DateTime('now'));
+
         $form=$this->createForm(AjoutHorsForfaitType::class,$frais);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
@@ -110,9 +118,10 @@ class AccueilController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($frais);
             $entityManager->flush();
+            $idFiche=$frais->getIdFiche()->getId(); 
 
         }
-        return $this->redirectToRoute("accueil",['id'=>$id]);
+        return $this->redirectToRoute("accueil",['id'=>$idFiche]);
     }
 
     /**
@@ -124,6 +133,12 @@ class AccueilController extends AbstractController
         $fraisFF = $repository->find($idfrais);
         $form=$this->createForm(ConfChangQteType::class,$fraisFF);
         $form->handleRequest($request);
+        $idFiche=$fraisFF->getIdFiche()->getId();
+
+        //On récupère la fiche dont l'id se trouve dans l'URL
+        $repository=$this->getDoctrine()->getRepository(Fiche::class);
+        $fiche=$repository->find($idFiche);
+        $fiche->setDateModif(new \DateTime('now'));
 
         if($form->isSubmitted() && $form->isValid()){
             $entityManager = $this->getDoctrine()->getManager();
