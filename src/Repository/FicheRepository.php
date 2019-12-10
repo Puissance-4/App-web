@@ -19,11 +19,26 @@ class FicheRepository extends ServiceEntityRepository
         parent::__construct($registry, Fiche::class);
     }
 
-    public function findByDateCreation($value)
+    public function findByMonth($value)
     {
+        //(repositoryClass="App\Repository\FicheRepository")
         return $this->createQueryBuilder('f')
-            ->andWhere('f.DATE_CREATION = :val')
+            ->andWhere('MONTH(f.dateCreation) = :val')
             ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+
+
+    public function test()
+    {
+        //Essayer avec ce site
+        //https://simukti.net/blog/2012/04/05/how-to-select-year-month-day-in-doctrine2/
+        return $this->createQueryBuilder('f')
+            ->andWhere('f.montantRembourse>=1000')
+           // ->setParameter('val', $value)
             ->getQuery()
             ->getResult()
         ;

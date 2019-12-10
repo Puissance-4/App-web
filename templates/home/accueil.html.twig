@@ -7,6 +7,22 @@
     <a href="{{path('home')}}" type='button' class="btn btn-primary"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
     <a href="{{path('choixfiche')}}" type='button' class="btn btn-primary"><i class="fas fa-sign-out-alt"></i> Retour</a>
     <br/><br/>
+    <h1>FRAIS FORFAITISE</h1><hr/>
+    {% for unFraisF in ficheFF %}
+    
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    Type: {{ unFraisF.idType.libelle }}<br/>
+                    Quantité: {{ unFraisF.quantite }}
+                    <a href= '{{path("ConfChange", {id:idfiche, idfrais: unFraisF.id})}}' type="button" class="btn btn-warning">
+                        Modifier
+                    </a><br/>                 
+                 </div>
+            </div>
+        </div>
+        <hr/>
+    {% endfor %}
     <h1>FRAIS HORS FORFAIT</h1><hr/>
     {% for unFraisHF in fraisHF %}
         <div class="container">
@@ -31,21 +47,4 @@
         <hr/>
     {% endfor %}
     <a href='{{path("ajouterhf", {'id': idfiche})}}' type='button' class="btn btn-success">Ajouter frais hors forfait</a><hr/>
-    <h1>FRAIS FORFAITISE</h1><hr/>
-    {% for unType in typeFraisF %}
-    
-        <div class="container">
-            <div class="row">
-                <div class="col-sm">
-                    Type: {{ unType.libelle}}<br/>
-                    Quantité: {{ ficheFF[loop.index0].quantite}}
-                    <a href= '{{path("ConfChange", {id:idfiche, idfrais: unType.id})}}' type="button" class="btn btn-warning">
-                        Modifier
-                    </a><br/>                 
-                 </div>
-            </div>
-        </div>
-        <hr/>
-    {% endfor %}
-    
 {% endblock %}

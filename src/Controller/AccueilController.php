@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Fiche;
 use App\Entity\Fraisforfaitise;
 use App\Entity\Fraishorsforfait;
 use App\Form\AjoutFraiForfaitiseType;
@@ -20,7 +21,15 @@ class AccueilController extends AbstractController
     public function ajouterhf($id, Request $request) //permet d'ajouter un frais hors forfait
     {
         $entityManager=$this->getDoctrine()->getManager();
+
+        //On récupère la fiche dont l'id se trouve dans l'URL
+        $repository=$this->getDoctrine()->getRepository(Fiche::class);
+        $fiche=$repository->find($id);
+
+        //On ajoute dans le frais la fiche
         $fraishf= new Fraishorsforfait();
+        $fraishf->setIdFiche($fiche);
+
         $form=$this->createForm(AjoutHorsForfaitType::class,$fraishf);
         $form->handleRequest($request);
 

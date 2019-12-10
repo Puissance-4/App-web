@@ -12,7 +12,7 @@
 
 <div class="example-wrapper">
     <h4>Choisir le mois :</h4>
-    <form method='Post' action='{{path('choixficheParMois')}}'>
+    <form method='Post' action='{{path('choixfiche')}}'>
         <select class='form-control' name='mois'>
             <option value='00' selected>Tous</option>
             <option value='01'>Janvier</option>
@@ -30,23 +30,37 @@
         </select>
         <button type='submit' class="btn btn-primary">Valider</button>
     </form>
+    </div>
 
+    </br><hr/>
+        <a href='{{ path("ajouterFiche") }}' type='button' class="btn btn-success">Ajouter Fiche</a><hr/>
     </br>
-    
-    {% for uneFiche in fiches %}
-        <div class="container">
-            <div class="row">
-                <div class="col-sm">
-                    Date de création : {{uneFiche.dateCreation|date("d-m-Y")}}<br/>
-                    Date de modification : {{uneFiche.dateModif|date("d-m-Y")}}<br/>
-                    Montant remboursé : {{uneFiche.montantRembourse}}<br/>
-                    Etat : {{uneFiche.idEtat.libelle}}<br/>
-                    <a href="{{path('accueil', {id : uneFiche.id})}}" >Editer</a>
-                </div>
-            </div>
-        </div>
-        <hr/>
+<table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">Date de création</th>
+      <th scope="col">Date de modification</th>
+      <th scope="col">Montant remboursé</th>
+      <th scope="col">Etat</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for uneFiche in fiches %}
+
+  <tr>
+      <th scope="row">{{uneFiche.dateCreation|date("d-m-Y")}}</th>
+      <td>{{uneFiche.dateModif|date("d-m-Y")}}</td>
+      <td> {{uneFiche.montantRembourse}}</td>
+      <td>{{uneFiche.idEtat.libelle}}</td>
+      <td><a href="{{path('accueil', {id : uneFiche.id})}}" type='button' class="btn btn-warning" >Editer</a></td>
+    </tr>
+        
     {% endfor %}
+  
+  </tbody>
+</table>
     
-</div>
+    
+
 {% endblock %}

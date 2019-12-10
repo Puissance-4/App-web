@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Fiche
  *
  * @ORM\Table(name="FICHE", indexes={@ORM\Index(name="I_FK_FICHE_VISITEUR", columns={"ID_VISITEUR"}), @ORM\Index(name="I_FK_FICHE_ETAT", columns={"ID_ETAT"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\FicheRepository")
  */
 class Fiche
 {
@@ -29,9 +29,7 @@ class Fiche
     private $dateModif;
 
     /**
-     * @var \DateTime|null
-     *
-     * @ORM\Column(name="DATE_CREATION", type="date", nullable=true)
+     * @ORM\Column(name="DATE_CREATION",type="date", nullable=true)
      */
     private $dateCreation;
 

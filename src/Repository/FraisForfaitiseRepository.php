@@ -24,10 +24,25 @@ class FraisForfaitiseRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('f')
             ->andWhere('f.ID_FICHE = :val')
             ->setParameter('val', $value)
+            ->orderBy('f.ID_TYPE', 'ASC')
             ->getQuery()
             ->getResult()
         ;
     }
+
+    //On récupère le frais avec son id et le type souhaité
+    public function findByIdFicheAndByIdType($value, $value2)
+    {
+        return $this->createQueryBuilder('f')
+            ->andWhere('f.ID_FICHE = :val')
+            ->andWhere('f.ID_TYPE = :val2')
+            ->setParameter('val', $value)
+            ->setParameter('val2', $value2)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 
     // /**
     //  * @return Fraisforfaitise[] Returns an array of Fraisforfaitise objects

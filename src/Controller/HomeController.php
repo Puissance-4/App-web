@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Etat;
 use App\Entity\Fiche;
 use App\Entity\Fraisforfaitise;
 use App\Entity\Typefraisforfait;
 use App\Entity\Fraishorsforfait;
 use App\Entity\Visiteur;
+use App\Form\AjoutFicheType;
 use App\Form\LoginType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -44,24 +46,45 @@ class HomeController extends AbstractController
     /**
      * @Route("/choixfiche", name="choixfiche")
      */
-    public function choixfiche() 
+    public function choixfiche(Request $request)
     {
         $repository=$this->getDoctrine()->getRepository(Fiche::class);
-        $fiches=$repository->findAll(); //récupère toutes les fiches
+        $mois= $request->get('mois');
+        if($mois=='00' || !isset($mois)){
+            $fiches=$repository->findAll(); //récupère toutes les fiches
+        }
+        else{
+            $fiches=$repository->findByMonth($mois); //récupère les fiches du mois
+        }
 
         return $this->render('home/choixfiche.html.twig', ['fiches'=>$fiches]); //page de choix de la fiche
     }
 
     /**
-     * @Route("/choixficheParMois", name="choixficheParMois")
+     * @Route("/ajouterFiche", name="ajouterFiche")
      */
-    public function choixficheParMois(Request $request) 
-    {
-        $repository=$this->getDoctrine()->getRepository(Fiche::class);
-        $mois= $request->get('mois');
-        $fiches=$repository->findByDateCreation('2019-'.$mois.'-07');
+    public function ajouterFiche(Request $request)
+    {  
+        $entityManager=$this->getDoctrine()->getManager();
+        $fiche= new Fiche;
 
-        return $this->render('home/choixfiche.html.twig', ['fiches'=>$fiches]); //page de choix de la fiche
+        $repository=$this->getDoctrine()->getRepository(Etat::class);
+        $etat=$repository->find("3");
+
+        $fiche->setDateCreation(new \DateTime('now'));
+        $fiche->setIdEtat($etat);
+
+        $form=$this->createForm(AjoutFicheType::class, $fiche);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $entityManager->persist($fiche);
+            $entityManager->flush($fiche);
+
+            return $this->redirectToRoute("choixfiche");
+        }
+
+        return $this->render('home/ajoutFiche.html.twig', ['form'=>$form->createView()]); //page de choix de la fiche
     }
 
     
@@ -72,10 +95,13 @@ class HomeController extends AbstractController
     {
         $repository=$this->getDoctrine()->getRepository(Fraishorsforfait::class);
         $fraisHorsForfait=$repository->findByIdFiche($id);
+
         $repository=$this->getDoctrine()->getRepository(Typefraisforfait::class);
         $typeFraisForfaitise=$repository->findAll();
+
         $repository=$this->getDoctrine()->getRepository(Fraisforfaitise::class);
         $ficheFF=$repository->findByIdFiche($id);
+
         $repository=$this->getDoctrine()->getRepository(Fiche::class);
         $idfiche=$id;
 
