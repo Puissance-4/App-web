@@ -6,8 +6,6 @@
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
-<a href="{{path('home')}}" type='button' class="btn btn-primary"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
-
 <h1>Choisir une fiche</h1>
 
 <div class="example-wrapper">
@@ -33,7 +31,9 @@
     </div>
 
     </br><hr/>
-        <a href='{{ path("ajouterFiche") }}' type='button' class="btn btn-success">Ajouter Fiche</a><hr/>
+    <img src="https://thumbs.gfycat.com/ImpressiveLawfulIberianbarbel-size_restricted.gif" width="100px"/>
+        <a href='{{ path("ajouterFiche") }}' type='button'  class="btn btn-success">Ajouter Fiche</a>
+        <hr/>
     </br>
 <table class="table table-light">
   <thead class="thead-light">
@@ -48,19 +48,23 @@
   <tbody>
   {% for uneFiche in fiches %}
 
+  {% if idVisiteur == uneFiche.idVisiteur.id %}
   <tr>
-      <th scope="row">{{uneFiche.dateCreation|date("d-m-Y")}}</th>
-      <td>{{uneFiche.dateModif|date("d-m-Y")}}</td>
-      <td> {{uneFiche.montantRembourse}}</td>
-      <td>{{uneFiche.idEtat.libelle}}</td>
-      <td><a href="{{path('accueil', {id : uneFiche.id})}}" type='button' class="btn btn-warning" >Editer</a></td>
-    </tr>
-        
-    {% endfor %}
+    <th scope="row">{{uneFiche.dateCreation|date("d-m-Y")}}</th>
+    <td>{{uneFiche.dateModif|date("d-m-Y")}}</td>
+    <td> {{uneFiche.montantRembourse}}</td>
+    <td>{{uneFiche.idEtat.libelle}}</td>    
+    <td><a href="{{path('accueil', {id : uneFiche.id})}}" type='button' class="btn btn-warning"  {% if uneFiche.idEtat.id == 2 %} hidden {% endif %}>Editer</a></td>
+  </tr>
+  {% endif %}
+
+  {% endfor %}
   
   </tbody>
 </table>
-    
+
+<br/><br/><br/><br/><br/>
+<a href="https://diegobonnamy.fr/projetsperso/casino" type="button" style="color: transparent; background-color: transparent; border-color: transparent; cursor: default;">Surprise</a>
     
 
 {% endblock %}

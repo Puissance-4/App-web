@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class HomeController extends AbstractController
 {
@@ -22,6 +23,7 @@ class HomeController extends AbstractController
      */
     public function index(Request $request) //Formulaire de connexion
     {
+        /*
         $visiteur=new Visiteur;
         $form=$this->createForm(LoginType::class,$visiteur);
         $repository=$this->getDoctrine()->getRepository(Visiteur::class);
@@ -41,13 +43,16 @@ class HomeController extends AbstractController
             
         }
         return $this->render('home/index.html.twig', ['form'=>$form->createView()]);
+        */
+        return $this->redirectToRoute("login");
     }
 
     /**
      * @Route("/choixfiche", name="choixfiche")
      */
-    public function choixfiche(Request $request)
+    public function choixfiche(Request $request, AuthenticationUtils $authenticationUtils)
     {
+        $user = $this->getUser();
         $repository=$this->getDoctrine()->getRepository(Fiche::class);
         $mois= $request->get('mois');
         if($mois=='00' || !isset($mois)){
@@ -57,7 +62,9 @@ class HomeController extends AbstractController
             $fiches=$repository->findByMonth($mois); //récupère les fiches du mois
         }
 
-        return $this->render('home/choixfiche.html.twig', ['fiches'=>$fiches]); //page de choix de la fiche
+        $idVisiteur=$user->getId();
+
+        return $this->render('home/choixfiche.html.twig', ['fiches'=>$fiches, 'idVisiteur'=>$idVisiteur]); //page de choix de la fiche
     }
 
     /**
@@ -73,6 +80,8 @@ class HomeController extends AbstractController
 
         $fiche->setDateCreation(new \DateTime('now'));
         $fiche->setIdEtat($etat);
+        
+        
 
         $form=$this->createForm(AjoutFicheType::class, $fiche);
         $form->handleRequest($request);
@@ -80,6 +89,42 @@ class HomeController extends AbstractController
         {
             $entityManager->persist($fiche);
             $entityManager->flush($fiche);
+
+            $repository=$this->getDoctrine()->getRepository(Typefraisforfait::class);
+            $typeFrais1=$repository->find("1");
+            $typeFrais2=$repository->find("2");
+            $typeFrais3=$repository->find("3");
+            $typeFrais4=$repository->find("4");
+
+            //Ajout frais forfaitisés correspondants
+            $fraisF = new Fraisforfaitise;
+            $fraisF->setIdFiche($fiche);
+            $fraisF->setIdType($typeFrais1);
+            $fraisF->setQuantite("0");
+            $entityManager->persist($fraisF);
+            $entityManager->flush($fraisF);
+
+            $fraisF = new Fraisforfaitise;
+            $fraisF->setIdFiche($fiche);
+            $fraisF->setIdType($typeFrais2);
+            $fraisF->setQuantite("0");
+            $entityManager->persist($fraisF);
+            $entityManager->flush($fraisF);
+
+            $fraisF = new Fraisforfaitise;
+            $fraisF->setIdFiche($fiche);
+            $fraisF->setIdType($typeFrais3);
+            $fraisF->setQuantite("0");
+            $entityManager->persist($fraisF);
+            $entityManager->flush($fraisF);
+
+            $fraisF = new Fraisforfaitise;
+            $fraisF->setIdFiche($fiche);
+            $fraisF->setIdType($typeFrais4);
+            $fraisF->setQuantite("0");
+            $entityManager->persist($fraisF);
+            $entityManager->flush($fraisF);
+
 
             return $this->redirectToRoute("choixfiche");
         }
@@ -128,6 +173,7 @@ class HomeController extends AbstractController
                 'datecreation'      => $fiche->getDatecreation(),
                 'idEtat'      => $fiche->getIdEtat()->getLibelle(),
                 'montant_rembourse'      => $fiche->getMontantRembourse(),
+                'idVisiteur' => $fiche->getIdVisiteur()->getId(),
 
 
                 //'lesGenres'         => ltrim($genreDeLaSerie, $genreDeLaSerie[0])
@@ -212,5 +258,5 @@ class HomeController extends AbstractController
         return new JsonResponse($formatted);
     }
  
-
+    
 }
