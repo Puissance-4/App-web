@@ -1,49 +1,65 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Appli Web{% endblock %}
-
 {% block body %}
     <br/>
-    <a href="{{path('choixfiche')}}" type='button' class="btn btn-primary"><i class="fas fa-sign-out-alt"></i> Retour</a>
+    <!-- Bouton retour pour retourner à la page précédente où on peut choisir une fiche -->
+    <a href="{{path('choixfiche')}}" type='button' class="btn btn-primary"><i class="fas fa-sign-out-alt"></i>Retour</a>
     <br/><br/>
+
+    <!-- Affiche un tableau avec les frais forfaitisés -->
     <h1>FRAIS FORFAITISE</h1><hr/>
-    {% for unFraisF in ficheFF %}
-    
-        <div class="container">
-            <div class="row">
-                <div class="col-sm">
-                    Type: {{ unFraisF.idType.libelle }}<br/>
-                    Quantité: {{ unFraisF.quantite }}
-                    <a href= '{{path("ConfChange", {id:idfiche, idfrais: unFraisF.id})}}' type="button" class="btn btn-warning">
-                        Modifier
-                    </a><br/>                 
-                 </div>
-            </div>
-        </div>
-        <hr/>
-    {% endfor %}
+    <table class="table table-light">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">Libellé</th>
+                <th scope="col">Quantité</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+        <!-- On boucle sur la liste des frais forfaitisés, afin d'afficher les caractéristiques correspondantes à ce frais -->
+            {% for unFraisF in fraisF %}
+            <tr>
+                <th scope="row">{{ unFraisF.idType.libelle }}</th>
+                <td>{{ unFraisF.quantite }}</td>
+                <td><a href='{{path("modifierQtiteFF", {id:idfiche, idfrais: unFraisF.id})}}' type="button" class="btn btn-warning"><i class="fas fa-edit"></i></a></td>    
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Affiche un tableau avec les frais hors forfait -->
     <h1>FRAIS HORS FORFAIT</h1><hr/>
-    {% for unFraisHF in fraisHF %}
-        <div class="container">
-            <div class="row">
-                <div class="col-sm">
-                    Date : {{ unFraisHF.date|date("d-m-Y") }}<br/>
-                    Nom : {{ unFraisHF.libelle }}<br/>
-                    Montant : {{ unFraisHF.montant }}€<br/>
-                </div>
-                <div class="col-sm">
-                    <a href="{{path('modifierFraisHF',{ 'id':unFraisHF.id })}}" type='button' class="btn btn-warning"><i class="fas fa-edit"></i></a> 
-                </div>
-                <div class="col-sm">
+    <table class="table table-light">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Libellé</th>
+                <th scope="col">Montant</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- On boucle sur la liste des frais hors forfait, afin d'afficher les caractéristiques correspondantes à ce frais -->
+            {% for unFraisHF in fraisHF %}
+            <tr>
+                <th scope="row">{{ unFraisHF.date|date("d-m-Y") }}</th>
+                <td>{{ unFraisHF.libelle }}</td>
+                <td>{{ unFraisHF.montant }}€</td>    
+                <td><a href="{{path('modifierFraisHF',{ 'id':unFraisHF.id })}}" type='button' class="btn btn-warning"><i class="fas fa-edit"></i></a></td>    
+                <td>
+                <!-- Ce formulaire permet de n'afficher qu'un seul bouton "supprimer" pour supprimer un frais hors forfait en générant un "token" permettant une suppression sécuriséée -->
                     <form action="{{ path('supprimerHF', {id : unFraisHF.id})}}" method="post" onSubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce frais ?')">
                         <input type="hidden" name="_method" value="DELETE"></input>
                         <input type="hidden" name="_token" value="{{csrf_token('delete'~ unFraisHF.id)}}"></input>
-                        <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                        <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button> 
                     </form>
-                </div>
-            </div>
-        </div>
-        <hr/>
-    {% endfor %}
+                </td>    
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+   
     <a href='{{path("ajouterhf", {'id': idfiche})}}' type='button' class="btn btn-success">Ajouter frais hors forfait</a><hr/>
 {% endblock %}

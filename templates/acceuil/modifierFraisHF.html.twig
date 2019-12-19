@@ -1,7 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AcceuilController!{% endblock %}
-
 {% block body %}
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
@@ -9,16 +7,18 @@
 </style>
 
 <div class="example-wrapper">
-<div class="text-center">
-    <h1>Editer le frais hors forfait: {{frais.id}}</h1>
-    <br/><br/>
-    <hr/>
-</div>
-<div class="example-wrapper">
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <button type="submit" class="btn btn-warning">Sauvegarder</button>
-    {{ form_end(form) }}
-</div>
+    <div class="text-center">
+        <h1>Editer le frais hors forfait: {{frais.libelle}}</h1>
+        <br/><br/>
+        <hr/>
+    </div>
+
+<!-- Affichage du formulaire permettant de modifier un frais hors forfait -->
+    <div class="example-wrapper">
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <button type="submit" class="btn btn-warning">Sauvegarder</button>
+        {{ form_end(form) }}
+    </div>
 </div>
 {% endblock %}

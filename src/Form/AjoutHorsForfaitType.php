@@ -16,8 +16,8 @@ class AjoutHorsForfaitType extends AbstractType
     {
         $builder
             ->add('date')
-            ->add('montant')
             ->add('libelle')
+            ->add('montant')
             //->add('validite')
             /*->add('idFiche',
             EntityType::class,

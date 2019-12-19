@@ -1,70 +1,88 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<style>
+  <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+  </style>
 
-<h1>Choisir une fiche</h1>
+  <br/><br/>
 
-<div class="example-wrapper">
-    <h4>Choisir le mois :</h4>
-    <form method='Post' action='{{path('choixfiche')}}'>
-        <select class='form-control' name='mois'>
+
+  <h1>Choisir une fiche</h1>
+  </br><hr/>
+  <form method='Post' action='{{path('choixfiche')}}'>
+    <div class="container">
+      <span class="align-middle">
+      <div class="row">
+        <div class="col-sm-1">
+          <h5>Filtrer :</h5>
+        </div>
+        <div class="col-sm-3">
+          <!-- Affiche une liste déroulante permettant d'afficher une liste déroulante -->
+          <select class='form-control' name='mois'>
             <option value='00' selected>Tous</option>
-            <option value='01'>Janvier</option>
-            <option value='02'>Février</option>
+            <option value='01'>Janvier</option> 
+            <option value='02'>Février</option> 
             <option value='03'>Mars</option>
             <option value='04'>Avril</option>
             <option value='05'>Mai</option>
-            <option value='06'>Juin</option>
-            <option value='07'>Juillet</option>
+            <option value='06'>Juin</option> 
+            <option value='07'>Juillet</option> 
             <option value='08'>Août</option>
             <option value='09'>Septembre</option>
             <option value='10'>Octobre</option>
             <option value='11'>Novembre</option>
-            <option value='12'>Décembre</option>
-        </select>
-        <button type='submit' class="btn btn-primary">Valider</button>
-    </form>
+            <option value='12'>Décembre</option> 
+          </select>
+        </div>
+        <div class="col-sm-1">
+          <button type='submit' class="btn btn-primary">Valider</button>  
+        </div>
+        <div class="col-sm-6"> <!-- Colonne vide permettant de séparer les champs -->
+        </div>
+        <div class="col-sm-1">
+          <a href='{{ path("ajouterFiche") }}' type='button'  class="btn btn-success">Ajouter</a>
+        </div>
+      </div>
     </div>
+  </form>
+      
+  <br/>
 
-    </br><hr/>
-    <img src="https://thumbs.gfycat.com/ImpressiveLawfulIberianbarbel-size_restricted.gif" width="100px"/>
-        <a href='{{ path("ajouterFiche") }}' type='button'  class="btn btn-success">Ajouter Fiche</a>
-        <hr/>
-    </br>
-<table class="table table-light">
-  <thead class="thead-light">
-    <tr>
-      <th scope="col">Date de création</th>
-      <th scope="col">Date de modification</th>
-      <th scope="col">Montant remboursé</th>
-      <th scope="col">Etat</th>
-      <th scope="col"></th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for uneFiche in fiches %}
-
-  {% if idVisiteur == uneFiche.idVisiteur.id %}
-  <tr>
-    <th scope="row">{{uneFiche.dateCreation|date("d-m-Y")}}</th>
-    <td>{{uneFiche.dateModif|date("d-m-Y")}}</td>
-    <td> {{uneFiche.montantRembourse}}</td>
-    <td>{{uneFiche.idEtat.libelle}}</td>    
-    <td><a href="{{path('accueil', {id : uneFiche.id})}}" type='button' class="btn btn-warning"  {% if uneFiche.idEtat.id == 2 %} hidden {% endif %}>Editer</a></td>
-  </tr>
-  {% endif %}
-
+  <!-- Affiche un message lors d'ajout de fiche -->
+  {% for message in app.flashes('success') %}
+    <div class="alert alert-success">
+      {{ message }}
+    </div>
   {% endfor %}
-  
-  </tbody>
-</table>
 
-<br/><br/><br/><br/><br/>
-<a href="https://diegobonnamy.fr/projetsperso/casino" type="button" style="color: transparent; background-color: transparent; border-color: transparent; cursor: default;">Surprise</a>
-    
-
+  <br/>
+  <!-- Tableau qui affiche  les fiches du visiteur connecté -->
+  <table class="table table-light">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col">Date de création</th>
+        <th scope="col">Date de modification</th>
+        <th scope="col">Montant remboursé</th>
+        <th scope="col">Etat</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for uneFiche in fiches %}
+        {% if idVisiteur == uneFiche.idVisiteur.id %}
+          <tr>
+            <th scope="row">{{uneFiche.dateCreation|date("d-m-Y")}}</th>
+            <td>{{uneFiche.dateModif|date("d-m-Y")}}</td>
+            <td> {{uneFiche.montantRembourse}}</td>
+            <td>{{uneFiche.idEtat.libelle}}</td>    
+            <td> <!-- Le "if" dans la balise "a" permet d'afficher le bouton "Editer" seulement si la fiche n'est pas clôturée -->
+              <a href="{{path('accueil', {id : uneFiche.id})}}" type='button' class="btn btn-warning"  {% if uneFiche.idEtat.id == 2 %} hidden {% endif %}>Editer</a>
+            </td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}

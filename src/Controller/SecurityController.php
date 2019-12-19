@@ -9,6 +9,11 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
+
+    //Ce controlleur permet de gérer les sessions
+    // /!\ NE PAS TOUCHER SVP /!\
+
+
     /**
      * @Route("/login", name="login")
      */
