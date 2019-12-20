@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * Fraisforfaitise
@@ -25,6 +27,7 @@ class Fraisforfaitise
      * @var int|null
      *
      * @ORM\Column(name="QUANTITE", type="integer", nullable=true)
+     * @Assert\Positive(message="La valeur doit être positive")
      */
     private $quantite;
 

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * Fraishorsforfait
@@ -32,7 +34,9 @@ class Fraishorsforfait
      * @var string
      *
      * @ORM\Column(name="MONTANT", type="decimal", precision=10, scale=2, nullable=false)
+     * @Assert\Positive(message="La valeur doit être positive")
      */
+
     private $montant;
 
     /**

@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Fiche;
 use App\Entity\Fraisforfaitise;
 use App\Entity\Fraishorsforfait;
-use App\Form\AjoutFraiForfaitiseType;
 use App\Form\AjoutHorsForfaitType;
 use App\Form\ConfChangQteType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -44,7 +43,7 @@ class AccueilController extends AbstractController
            //Redirige l'utilisateur vers 'accueil' avec l'id de la fiche
            return $this->redirectToRoute("accueil",['id'=>$id]);
         }
-        return $this->render('acceuil/ajouterhf.html.twig',['form'=>$form->createView()]);
+        return $this->render('acceuil/ajouterhf.html.twig',['form'=>$form->createView(), 'fiche'=>$fiche]);
 
     }
      
@@ -85,31 +84,6 @@ class AccueilController extends AbstractController
             return $this->redirectToRoute("accueil",['id'=>$idFiche]);
         }
         return $this->render('acceuil/modifierFraisHF.html.twig', ['frais'=>$frais, 'form'=>$form->createView()]);
-    }
-
-
-
-
-
-    /**
-     * @Route("/modifierFraisF/{id}", name="modifierFraisF", methods="GET|POST")
-     */
-    public function modifierFraisF($id, Request $request)  // permet de modifier un frais forfaitisé déjà créé
-    {
-        //On récupère le frais correspondant à l'id passé dans l'URL
-        $repository = $this->getDoctrine()->getRepository(FraisForfaitise::class);
-        $frais = $repository->find($id);
-
-        //Création du formulaire et enregistrement des modifications (pour plus de détails, se référer aux méthodes précédentes)
-        $form=$this->createForm(AjoutFraiForfaitiseType::class,$frais);
-        $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()){
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->flush();
-
-            return $this->redirectToRoute("accueil",['id'=>$id]);
-        }
-        return $this->render('acceuil/modifierFraisF.html.twig', ['frais'=>$frais, 'form'=>$form->createView()]);
     }
 
 
@@ -175,6 +149,6 @@ class AccueilController extends AbstractController
             return $this->redirectToRoute("accueil",['id'=>$id]);
         }
         
-        return $this->render('acceuil/changeforfait.html.twig', ['fraisF'=>$fraisF,'idfrais'=>$idfrais,'id'=>$id,'form' => $form->createView()]);
+        return $this->render('acceuil/changeforfait.html.twig', ['fiche'=>$fiche, 'fraisF'=>$fraisF,'idfrais'=>$idfrais,'id'=>$id,'form' => $form->createView()]);
     }
 }
