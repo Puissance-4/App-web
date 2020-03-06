@@ -10,6 +10,12 @@ use App\Entity\Fraishorsforfait;
 use App\Entity\Visiteur;
 use App\Form\AjoutFicheType;
 use App\Form\LoginType;
+use App\Repository\FicheRepository;
+use App\Repository\FraisForfaitiseRepository;
+use App\Repository\FraisHorsForfaitRepository;
+use App\Repository\UserRepository;
+use App\Repository\VisiteurRepository; 
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -128,7 +134,7 @@ class HomeController extends AbstractController
         //On affiche une notification
         $this->addFlash('success', 'Fiche ajoutée !');
 
-        return $this->redirectToRoute("choixfiche");
+        return $this->redirectToRoute("accueil", array('id' => $fiche->getId()));
     }
 
 

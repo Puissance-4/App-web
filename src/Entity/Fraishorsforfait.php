@@ -34,7 +34,7 @@ class Fraishorsforfait
      * @var string
      *
      * @ORM\Column(name="MONTANT", type="decimal", precision=10, scale=2, nullable=false)
-     * @Assert\Positive(message="La valeur doit être positive")
+     * @Assert\Positive(message="La valeur doit être un nombre positif")
      */
 
     private $montant;

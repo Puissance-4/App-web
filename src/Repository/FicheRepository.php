@@ -9,7 +9,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 /**
  * @method Fiche|null find($id, $lockMode = null, $lockVersion = null)
  * @method Fiche|null findOneBy(array $criteria, array $orderBy = null)
- * @method Fiche[]    findAll()
+ * @method Fiche[]    findAll(array $orderBy = 'f.dateCreation', 'DESC')
  * @method Fiche[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class FicheRepository extends ServiceEntityRepository
@@ -19,12 +19,18 @@ class FicheRepository extends ServiceEntityRepository
         parent::__construct($registry, Fiche::class);
     }
 
+    public function findAll()
+    {
+        return $this->findBy(array(), array('dateCreation' => 'DESC'));
+    }
+
     public function findByMonth($value)
     {
         //(repositoryClass="App\Repository\FicheRepository")
         return $this->createQueryBuilder('f')
             ->andWhere('MONTH(f.dateCreation) = :val')
             ->setParameter('val', $value)
+            ->orderBy('f.dateCreation', 'DESC')
             ->getQuery()
             ->getResult()
         ;

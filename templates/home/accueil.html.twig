@@ -30,6 +30,13 @@
 
     <!-- Affiche un tableau avec les frais hors forfait -->
     <h1>FRAIS HORS FORFAIT</h1><hr/>
+
+    {% if fraisHF is empty %} <!-- S'il n'y a pas de frais hors forfait enregistré, affichage d'un message, sinon, affichage d'un tableau listant les frais -->
+        <br/>
+        <h4>Il n'y a aucun frais hors forfait enregistré pour cette fiche</h4>
+        <br/>
+        {% else %}
+    
     <table class="table table-light">
         <thead class="thead-light">
             <tr>
@@ -60,6 +67,7 @@
             {% endfor %}
         </tbody>
     </table>
+    {% endif %}
    
     <a href='{{path("ajouterhf", {'id': idfiche})}}' type='button' class="btn btn-success">Ajouter frais hors forfait</a><hr/>
 {% endblock %}

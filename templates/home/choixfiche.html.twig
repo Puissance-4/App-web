@@ -9,7 +9,7 @@
   <br/><br/>
 
 
-  <h1>Choisir une fiche</h1>
+  <h1>Saisie des frais</h1>
   </br><hr/>
   <form method='Post' action='{{path('choixfiche')}}'>
     <div class="container">
@@ -57,6 +57,11 @@
     </div>
   {% endfor %}
 
+  {% if fiches is empty %}
+    <h4>Il n'y a pas de fiche enregistrée pour ce mois-ci</h4>
+  {% else %}
+  
+
   <br/>
   <!-- Tableau qui affiche  les fiches du visiteur connecté -->
   <table class="table table-light">
@@ -78,11 +83,12 @@
             <td> {{uneFiche.montantRembourse}}</td>
             <td>{{uneFiche.idEtat.libelle}}</td>    
             <td> <!-- Le "if" dans la balise "a" permet d'afficher le bouton "Editer" seulement si la fiche n'est pas clôturée -->
-              <a href="{{path('accueil', {id : uneFiche.id})}}" type='button' class="btn btn-warning"  {% if uneFiche.idEtat.id == 2 %} hidden {% endif %}>Editer</a>
+              <a href="{{path('accueil', {id : uneFiche.id})}}" type='button' class="btn btn-warning"  {% if uneFiche.idEtat.id != 3 %} hidden {% endif %}>Editer</a>
             </td>
           </tr>
         {% endif %}
       {% endfor %}
     </tbody>
   </table>
+  {% endif %}
 {% endblock %}

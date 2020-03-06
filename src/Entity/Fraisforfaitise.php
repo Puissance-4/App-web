@@ -24,10 +24,9 @@ class Fraisforfaitise
     private $id;
 
     /**
-     * @var int|null
+     * @var bigint|null
      *
      * @ORM\Column(name="QUANTITE", type="integer", nullable=true)
-     * @Assert\Positive(message="La valeur doit être positive")
      */
     private $quantite;
 

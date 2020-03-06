@@ -26,25 +26,23 @@
         </style>
     </head>
     <body class="text-center">
-    <header>
-    <nav class="navbar navbar-dark bg-dark">
-        <ul class = "nav navbar-nav navbar-right">
-            {% if is_granted("IS_AUTHENTICATED_FULLY") %}
-                <li><a href="{{ path('logout') }}">Déconnexion</a></li>
-            {% else %}
-                <li><a href="{{ path('login') }}">Connexion</a></li>
-            {% endif %}
-        </ul>
-        <ul class="text-light">
-            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                Bienvenue, {{ app.user.username }}
-            {% endif %}
-        </ul>
-    </nav>
-
-    </header>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        <header>
+            <nav class="navbar navbar-dark bg-dark">
+                <ul class = "nav navbar-nav navbar-right">
+                    {% if is_granted("IS_AUTHENTICATED_FULLY") %}
+                        <li><a href="{{ path('logout') }}">Déconnexion</a></li>
+                    {% else %}
+                        <li><a href="{{ path('login') }}">Connexion</a></li>
+                    {% endif %}
+                </ul>
+                <ul class="text-light">
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        Bienvenue, {{ app.user.username }}
+                    {% endif %}
+                </ul>
+            </nav>
+        </header>
+            {% block body %}{% endblock %}
+            {% block javascripts %}{% endblock %}
     </body>
-
 </html>

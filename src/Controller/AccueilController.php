@@ -83,7 +83,7 @@ class AccueilController extends AbstractController
             //Redirige l'utilisateur vers 'accueil' avec l'id de la fiche
             return $this->redirectToRoute("accueil",['id'=>$idFiche]);
         }
-        return $this->render('acceuil/modifierFraisHF.html.twig', ['frais'=>$frais, 'form'=>$form->createView()]);
+        return $this->render('acceuil/modifierFraisHF.html.twig', ['fiche'=>$idFiche, 'frais'=>$frais, 'form'=>$form->createView()]);
     }
 
 
