@@ -70,71 +70,84 @@ class HomeController extends AbstractController
      */
     public function ajouterFiche(Request $request)
     {  
-        //On créer une nouvelle fiche vide
-        $entityManager=$this->getDoctrine()->getManager();
-        $fiche= new Fiche;
+        //On vérifie si une fiche n'existe pas déjà pour ce mois
+        $repository=$this->getDoctrine()->getRepository(Fiche::class);
+        $date = date("yy-m-d");
+        $last_fiche = $repository->findByDate($date);
 
-        //On prend l'etat "crée"
-        $repository=$this->getDoctrine()->getRepository(Etat::class);
-        $etat=$repository->find("3");
+        if($last_fiche == null){
+            //On créer une nouvelle fiche vide
+            $entityManager=$this->getDoctrine()->getManager();
+            $fiche= new Fiche;
 
-        //On affecte l'état à la fiche
-        $fiche->setDateCreation(new \DateTime('now'));
-        $fiche->setIdEtat($etat);
-        
-        //On récupère l'utilisateur connecté et on l'associe à la fiche
-        $user = $this->getUser();
-        $fiche->setIdVisiteur($user);
+            //On prend l'etat "crée"
+            $repository=$this->getDoctrine()->getRepository(Etat::class);
+            $etat=$repository->find("3");
 
-        //On enregistre dans la base de donnée
-        $entityManager->persist($fiche);
-        $entityManager->flush($fiche);
+            //On affecte l'état à la fiche
+            $fiche->setDateCreation(new \DateTime('now'));
+            $fiche->setIdEtat($etat);
+            
+            //On récupère l'utilisateur connecté et on l'associe à la fiche
+            $user = $this->getUser();
+            $fiche->setIdVisiteur($user);
 
-        //On récupère tous les types de frais
-        $repository=$this->getDoctrine()->getRepository(Typefraisforfait::class);
-        $typeFrais1=$repository->find("1");
-        $typeFrais2=$repository->find("2");
-        $typeFrais3=$repository->find("3");
-        $typeFrais4=$repository->find("4");
+            //On enregistre dans la base de donnée
+            $entityManager->persist($fiche);
+            $entityManager->flush($fiche);
 
-        //Ajout frais forfaitisés correspondants (4 types dans la base)
+            //On récupère tous les types de frais
+            $repository=$this->getDoctrine()->getRepository(Typefraisforfait::class);
+            $typeFrais1=$repository->find("1");
+            $typeFrais2=$repository->find("2");
+            $typeFrais3=$repository->find("3");
+            $typeFrais4=$repository->find("4");
 
-        //Frais forfaitisé 1
-        $fraisF = new Fraisforfaitise;
-        $fraisF->setIdFiche($fiche);
-        $fraisF->setIdType($typeFrais1);
-        $fraisF->setQuantite("0");
-        $entityManager->persist($fraisF);
-        $entityManager->flush($fraisF);
+            //Ajout frais forfaitisés correspondants (4 types dans la base)
 
-        //Frais forfaitisé 2
-        $fraisF = new Fraisforfaitise;
-        $fraisF->setIdFiche($fiche);
-        $fraisF->setIdType($typeFrais2);
-        $fraisF->setQuantite("0");
-        $entityManager->persist($fraisF);
-        $entityManager->flush($fraisF);
+            //Frais forfaitisé 1
+            $fraisF = new Fraisforfaitise;
+            $fraisF->setIdFiche($fiche);
+            $fraisF->setIdType($typeFrais1);
+            $fraisF->setQuantite("0");
+            $entityManager->persist($fraisF);
+            $entityManager->flush($fraisF);
 
-        //Frais forfaitisé 3
-        $fraisF = new Fraisforfaitise;
-        $fraisF->setIdFiche($fiche);
-        $fraisF->setIdType($typeFrais3);
-        $fraisF->setQuantite("0");
-        $entityManager->persist($fraisF);
-        $entityManager->flush($fraisF);
+            //Frais forfaitisé 2
+            $fraisF = new Fraisforfaitise;
+            $fraisF->setIdFiche($fiche);
+            $fraisF->setIdType($typeFrais2);
+            $fraisF->setQuantite("0");
+            $entityManager->persist($fraisF);
+            $entityManager->flush($fraisF);
 
-        //Frais forfaitisé 4
-        $fraisF = new Fraisforfaitise;
-        $fraisF->setIdFiche($fiche);
-        $fraisF->setIdType($typeFrais4);
-        $fraisF->setQuantite("0");
-        $entityManager->persist($fraisF);
-        $entityManager->flush($fraisF);
+            //Frais forfaitisé 3
+            $fraisF = new Fraisforfaitise;
+            $fraisF->setIdFiche($fiche);
+            $fraisF->setIdType($typeFrais3);
+            $fraisF->setQuantite("0");
+            $entityManager->persist($fraisF);
+            $entityManager->flush($fraisF);
 
-        //On affiche une notification
-        $this->addFlash('success', 'Fiche ajoutée !');
+            //Frais forfaitisé 4
+            $fraisF = new Fraisforfaitise;
+            $fraisF->setIdFiche($fiche);
+            $fraisF->setIdType($typeFrais4);
+            $fraisF->setQuantite("0");
+            $entityManager->persist($fraisF);
+            $entityManager->flush($fraisF);
 
-        return $this->redirectToRoute("accueil", array('id' => $fiche->getId()));
+            //On affiche une notification
+            //$this->addFlash('success', 'Fiche ajoutée !');
+
+            return $this->redirectToRoute("accueil", array('id' => $fiche->getId()));
+        }
+        else{
+            //On affiche une notification
+            $this->addFlash('warning', 'Une fiche existe déjà pour ce mois !');
+
+            return $this->redirectToRoute("choixfiche");
+        }
     }
 
 

@@ -57,6 +57,12 @@
     </div>
   {% endfor %}
 
+  {% for message in app.flashes('warning') %}
+    <div class="alert alert-warning">
+      {{ message }}
+    </div>
+  {% endfor %}
+
   {% if fiches is empty %}
     <h4>Il n'y a pas de fiche enregistrée pour ce mois-ci</h4>
   {% else %}

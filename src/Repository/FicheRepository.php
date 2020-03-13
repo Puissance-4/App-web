@@ -36,7 +36,17 @@ class FicheRepository extends ServiceEntityRepository
         ;
     }
 
-
+    public function findByDate($value)
+    {
+        //(repositoryClass="App\Repository\FicheRepository")
+        return $this->createQueryBuilder('f')
+            ->andWhere('MONTH(f.dateCreation) = MONTH(:val)')
+            ->andWhere('YEAR(f.dateCreation) = YEAR(:val)')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
     public function test()
     {

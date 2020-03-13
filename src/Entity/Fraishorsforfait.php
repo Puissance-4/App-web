@@ -26,6 +26,11 @@ class Fraishorsforfait
     /**
      * @var \DateTime
      *
+     * @Assert\Range(
+     *      min = "-1 year",
+     *      max = "now",
+*           minMessage = "La date doit être supérieure à {{ limit }}",
+     * )
      * @ORM\Column(name="DATE", type="date", nullable=false)
      */
     private $date;

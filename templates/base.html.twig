@@ -31,8 +31,6 @@
                 <ul class = "nav navbar-nav navbar-right">
                     {% if is_granted("IS_AUTHENTICATED_FULLY") %}
                         <li><a href="{{ path('logout') }}">Déconnexion</a></li>
-                    {% else %}
-                        <li><a href="{{ path('login') }}">Connexion</a></li>
                     {% endif %}
                 </ul>
                 <ul class="text-light">
